@@ -1,0 +1,9 @@
+# Compiled Java classes
+*.class
+out/
+bin/
+*.jar
+
+# IDE files
+.idea/
+*.iml
