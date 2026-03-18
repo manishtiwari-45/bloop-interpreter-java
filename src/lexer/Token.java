@@ -26,6 +26,7 @@ public class Token {
         return line;
     }
 
+
     // To print an object
     @Override
     public String toString(){
