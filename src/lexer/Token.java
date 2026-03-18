@@ -13,6 +13,7 @@ public class Token {
         this.line = line;
     }
 
+    // Getters
     public TokenType getType(){
         return type;
     }
@@ -25,6 +26,8 @@ public class Token {
         return line;
     }
 
+
+    // To print an object
     @Override
     public String toString(){
         return "Token(" + type + ", \"" + value + "\", line=" + line + ")";
