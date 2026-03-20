@@ -104,8 +104,54 @@ public class Tokenizer {
                 System.err.println("Warning: unknown character '" + c
                         + "' on line " + line);
                 break;
-        }
+
+                // Check if the current character is a digit (0–9)
+                // Character.isDigit(c) is a built-in method that returns true for numeric characters
+                if (Character.isDigit(c)) {
+                        scanNumber(c); // handle the full number
+                }
+
+                // Check if the character is a letter (a–z, A–Z) or underscore (_)
+                // Underscore is allowed to support variable names like my_var
+                else if (Character.isLetter(c) || c == '_') {
+                        scanWord(c); // handle keyword or identifier — Day 11
+                }
+                else {
+                        System.err.println("Warning: unknown character '"
+                            + c + "' on line " + line);
+                }
+                break;
+        } 
+
     }
+
+    // scanNumber: reads full integer/decimal and creates NUMBER token
+    private void scanNumber(char firstDigit) {
+
+        // Start with first digit
+        StringBuilder number = new StringBuilder();
+        number.append(firstDigit); // e.g. starts as "3"
+
+        // Read continuous digits
+        while (!isAtEnd() && Character.isDigit(peek())) {
+            number.append(advance()); // consume the digit and add to our string
+        }
+
+        // Check and read decimal part
+        if (!isAtEnd() && peek() == '.' && Character.isDigit(peekNext())) {
+            number.append(advance()); // consume the '.' dot character
+
+            // Read digits after decimal
+            while (!isAtEnd() && Character.isDigit(peek())) {
+                number.append(advance());
+            }
+        }
+
+        // Create NUMBER token
+        addToken(TokenType.NUMBER, number.toString());
+    }
+
+
 
     // HELPER : advance()
     // Returns the CURRENT character AND moves current forward by 1
@@ -121,6 +167,13 @@ public class Tokenizer {
         tokens.add(new Token(type, value, line));
     }
 
+    // HELPER: peek()
+    // Returns the current character WITHOUT moving forward.
+    private char peek() {
+        if (isAtEnd()) return '\0';
+        return source.charAt(current);
+    }
+
     // HELPER: peekNext
     // Returns the character ONE AHEAD of current, without moving.
     private char peekNext(){
@@ -129,4 +182,5 @@ public class Tokenizer {
         }
         return source.charAt(current+1);
     }
+  
 }
