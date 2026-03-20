@@ -97,6 +97,10 @@ public class Tokenizer {
                 addToken(TokenType.NEWLINE, "\\n");
                 line++; // moved to the next line
                 break;
+            // We call scanString() to read until the closing quote    
+            case '"':
+                scanString();
+                break;
 
             // DEFAULT
             // If we reach here, the character is something we haven't
@@ -182,4 +186,60 @@ public class Tokenizer {
         }
         return source.charAt(current+1);
     }
+
+
+    // HELPER: scanString
+    // Reads characters until closing " and creates a STRING token
+    private void scanString() {
+
+        StringBuilder str = new StringBuilder(); // build the string content here
+
+        // Keep reading until we find the closing '"' or run out of source.
+        while (!isAtEnd() && peek() != '"') {
+            if (peek() == '\n') line++;
+            str.append(advance()); // consume each character inside the string
+        }
+
+        if (isAtEnd()) {
+            // We reached the end of the file without finding a closing quote.
+            System.err.println("Error: unterminated string on line " + line);
+            return; // stop — don't add a broken token
+        }
+
+        // Consume the closing 
+        advance();
+
+        // Create the STRING token. Value is just the inner text, no quotes.
+        addToken(TokenType.STRING, str.toString());
+    }
+
+
+    // HELPER: scanString
+    //Reads letters/digits/_ to form a word and decides if it's keyword or identifier
+    private void scanWord(char firstChar) {
+
+        StringBuilder word = new StringBuilder();
+        word.append(firstChar); // start with first character
+
+        while (!isAtEnd()
+               && (Character.isLetterOrDigit(peek()) || peek() == '_')) {
+            word.append(advance());  // build full word
+        }
+
+        String text = word.toString(); // complete word
+        TokenType type = KEYWORDS.get(text); // check if keyword
+
+        if (type == null) {
+            type = TokenType.IDENTIFIER; // else identifier
+        }
+
+
+        addToken(type, text);
+    }
+
+
+
+
+
+
 }
