@@ -182,5 +182,4 @@ public class Tokenizer {
         }
         return source.charAt(current+1);
     }
-  
 }
