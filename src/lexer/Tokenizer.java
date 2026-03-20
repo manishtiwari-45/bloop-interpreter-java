@@ -187,6 +187,7 @@ public class Tokenizer {
         return source.charAt(current+1);
     }
 
+
     // HELPER: scanString
     // Reads characters until closing " and creates a STRING token
     private void scanString() {
