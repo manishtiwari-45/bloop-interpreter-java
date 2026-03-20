@@ -105,9 +105,6 @@ public class Tokenizer {
             // DEFAULT
             // If we reach here, the character is something we haven't
             default:
-                System.err.println("Warning: unknown character '" + c
-                        + "' on line " + line);
-                break;
 
                 // Check if the current character is a digit (0–9)
                 // Character.isDigit(c) is a built-in method that returns true for numeric characters
@@ -125,8 +122,7 @@ public class Tokenizer {
                             + c + "' on line " + line);
                 }
                 break;
-        } 
-
+        }
     }
 
     // scanNumber: reads full integer/decimal and creates NUMBER token
@@ -150,12 +146,9 @@ public class Tokenizer {
                 number.append(advance());
             }
         }
-
         // Create NUMBER token
         addToken(TokenType.NUMBER, number.toString());
     }
-
-
 
     // HELPER : advance()
     // Returns the CURRENT character AND moves current forward by 1
@@ -170,14 +163,12 @@ public class Tokenizer {
     private void addToken(TokenType type, String value){
         tokens.add(new Token(type, value, line));
     }
-
     // HELPER: peek()
     // Returns the current character WITHOUT moving forward.
     private char peek() {
         if (isAtEnd()) return '\0';
         return source.charAt(current);
     }
-
     // HELPER: peekNext
     // Returns the character ONE AHEAD of current, without moving.
     private char peekNext(){
@@ -187,32 +178,26 @@ public class Tokenizer {
         return source.charAt(current+1);
     }
 
-
     // HELPER: scanString
     // Reads characters until closing " and creates a STRING token
     private void scanString() {
 
         StringBuilder str = new StringBuilder(); // build the string content here
-
         // Keep reading until we find the closing '"' or run out of source.
         while (!isAtEnd() && peek() != '"') {
             if (peek() == '\n') line++;
             str.append(advance()); // consume each character inside the string
         }
-
         if (isAtEnd()) {
             // We reached the end of the file without finding a closing quote.
             System.err.println("Error: unterminated string on line " + line);
             return; // stop — don't add a broken token
         }
-
         // Consume the closing 
         advance();
-
         // Create the STRING token. Value is just the inner text, no quotes.
         addToken(TokenType.STRING, str.toString());
     }
-
 
     // HELPER: scanString
     //Reads letters/digits/_ to form a word and decides if it's keyword or identifier
@@ -220,7 +205,6 @@ public class Tokenizer {
 
         StringBuilder word = new StringBuilder();
         word.append(firstChar); // start with first character
-
         while (!isAtEnd()
                && (Character.isLetterOrDigit(peek()) || peek() == '_')) {
             word.append(advance());  // build full word
@@ -232,14 +216,6 @@ public class Tokenizer {
         if (type == null) {
             type = TokenType.IDENTIFIER; // else identifier
         }
-
-
         addToken(type, text);
     }
-
-
-
-
-
-
 }
