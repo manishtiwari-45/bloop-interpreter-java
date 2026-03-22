@@ -47,18 +47,15 @@ public enum TokenType {
   // End of File
   EOF;
 
-  // Keyword Lookup Map (unmodifiable — never changes)
   // This map stores: keyword (String) → corresponding TokenType
   // Example: "if" → IF, "print" → PRINT
-  // It is shared across the entire program (static)
-  // It cannot be reassigned after initialization (final)
   private static final Map<String, TokenType> KEYWORD_MAP;
 
   // Static block runs only once when the class is loaded
   static {
 
     // Create a LinkedHashMap to store keywords
-    // LinkedHashMap preserves insertion order (useful for debugging)
+    // LinkedHashMap preserves insertion order
     Map<String, TokenType> map = new LinkedHashMap<>();
 
     // Add language keywords and their corresponding token types

@@ -2,33 +2,15 @@ package lexer;
 
 import java.util.Optional;
 
-// Immutable token class (no setters, only getters)
-public final class Token {
+/**
+ * @param type  what kind of token
+ * @param value actual text
+ * @param line  line number of source code
+ *
+ */ // Immutable token class (no setters, only getters)
+public record Token(TokenType type, String value, int line) {
     // Cannot be extended (ensures immutability)
 
-    private final TokenType type; // what kind of token
-    private final String value; // actual text
-    private final int line; // line number of source code
-
-    // Constructor
-    public Token(TokenType type, String value, int line) {
-        this.type = type;
-        this.value = value;
-        this.line = line;
-    }
-
-    // Getters
-    public TokenType getType() {
-        return type;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public int getLine() {
-        return line;
-    }
 
     // Returns value as Optional (empty if no meaningful value)
     public Optional<String> getValueOptional() {
@@ -70,9 +52,4 @@ public final class Token {
                 && this.line == other.line;
     }
 
-    // Generates hash based on type, value, and line
-    @Override
-    public int hashCode() {
-        return java.util.Objects.hash(type, value, line);
-    }
 }
