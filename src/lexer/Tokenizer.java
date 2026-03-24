@@ -17,7 +17,7 @@ public class Tokenizer {
         this.source = source;
     }
 
-    // ── tokenize ─────────────────────────────────────────────────
+    // tokenize
     // Main method. Returns an UNMODIFIABLE list — callers can read only.
     public List<Token> tokenize() {
         while (!isAtEnd()) {

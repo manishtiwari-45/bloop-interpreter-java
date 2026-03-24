@@ -11,7 +11,6 @@ import java.util.Optional;
 public record Token(TokenType type, String value, int line) {
     // Cannot be extended (ensures immutability)
 
-
     // Returns value as Optional (empty if no meaningful value)
     public Optional<String> getValueOptional() {
         return value.isEmpty() ? Optional.empty() : Optional.of(value);
