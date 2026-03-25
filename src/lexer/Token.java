@@ -34,7 +34,7 @@ public record Token(TokenType type, String value, int line) {
     // Returns formatted string for debugging
     @Override
     public String toString() {
-        return String.format("Token[%s | \"%s\" | line %d]", type, value, line);
+        return String.format("Token[%s  \"%s\"  line %d]", type, value, line);
     }
 
     // Checks equality based on type, value, and line

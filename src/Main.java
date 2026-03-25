@@ -9,7 +9,7 @@ public class Main {
 
         // Read program1 source code into a string
         String source = new String(
-                Files.readAllBytes(Paths.get("samples/program1_arithmetic.bloop"))
+                Files.readAllBytes(Paths.get("C:\\ACADEMIC\\4th_Semester\\AOOPs\\bloop-interpreter-java\\samples\\program1_arithmetic.bloop"))
         );
 
         // Run the tokenizer
