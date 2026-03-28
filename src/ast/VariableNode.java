@@ -13,10 +13,14 @@ public final class VariableNode implements Expression {
 
     // Look up the variable in env.
 // env.get(name) returns Optional<Object> - the variable may not exist.
-    public Object evaluate(Environment env){
-        return env.get(name)
-                .orElseThrow(() ->
-                        new RuntimeException("Undefined variable: '" + name + "'"));
+    public Object evaluate(Environment env) {
+        try {
+            return env.get(name)
+                    .orElseThrow(() ->
+                            new RuntimeException("Undefined variable: '" + name + "'"));
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
     }
     public String getName(){
         return name;
