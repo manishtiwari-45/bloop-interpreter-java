@@ -23,7 +23,6 @@ public final class AssignInstruction implements Instruction {
         Object value = expression.evaluate(env); // evaluate expression
         env.set(varName, value); // store in environment
     }
-
     // Get variable name
     public String getVarName() { return varName; }
 
