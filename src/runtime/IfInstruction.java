@@ -1,4 +1,4 @@
-package runtime
+package runtime;
 
 // Represents an immutable IF instruction (condition + body)
 public final class IfInstruction implements Instruction {
@@ -6,7 +6,7 @@ public final class IfInstruction implements Instruction {
     // Condition to evaluate (e.g., score > 50)
     private final Expression condition;
 
-    // List of instructions to execute if condition is true
+    // List of instructions to execute if conditiosn is true
     private final List<Instruction> body;
 
     // Constructor: initializes condition and makes body unmodifiable
