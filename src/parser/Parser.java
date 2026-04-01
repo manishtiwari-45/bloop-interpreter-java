@@ -200,10 +200,37 @@ public class Parser {
         }
     }
 
-    // parseBody() — parse an indented block of instructions
-    // Used by if and repeat. Reads until a non-indented line is found
-    private List<Instruction> parseBody(){
-        return new ArrayList<>();
+    // Parses a block of instructions (body of IF/REPEAT)
+    private List<Instruction> parseBody() {
+        List<Instruction> body = new ArrayList<>();
+
+        // Skip empty lines after ':'
+        skipNewLines();
+
+        // Read statements until top-level or EOF
+        while (!isAtEnd() && !isTopLevelStart()) {
+            Instruction instruction = parseStatement();
+
+            if (instruction != null) {
+                body.add(instruction);
+            }
+
+            skipNewLines();
+        }
+
+        return body;
+    }
+
+    // Checks if current token is a top-level statement start
+    private boolean isTopLevelStart() {
+        TokenType type = peek().getType();
+
+        // Valid top-level tokens
+        return type == TokenType.PUT ||
+            type == TokenType.PRINT ||
+            type == TokenType.IF ||
+            type == TokenType.REPEAT ||
+            type == TokenType.EOF;
     }
 
     // Parses: put<expression> into <variableName>
