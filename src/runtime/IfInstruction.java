@@ -1,9 +1,14 @@
 package runtime;
 
+import ast.Expression;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 // Represents an immutable IF instruction (condition + body)
 public final class IfInstruction implements Instruction {
 
-    // Condition to evaluate (e.g., score > 50)
     private final Expression condition;
 
     // List of instructions to execute if conditiosn is true
@@ -32,13 +37,10 @@ public final class IfInstruction implements Instruction {
         return false;
     }
 
-    // Returns condition
     public Expression getCondition() { return condition; }
 
-    // Returns body (already unmodifiable)
     public List<Instruction> getBody() { return body; }
 
-    // String representation of instruction
     @Override
     public String toString() {
         return "IfInstruction(if " + condition + " then " + body.size() + " instructions)";
