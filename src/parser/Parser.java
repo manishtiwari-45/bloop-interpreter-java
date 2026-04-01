@@ -136,4 +136,37 @@ public class Parser {
     private List<Instruction> parseBody(){
         return new ArrayList<>();
     }
+
+    // Parses: put<expression> into <variableName>
+    // put expression.. INTO IDENTIFIER NEWLINE 
+    private Instruction parseAssign() {
+
+        expect(TokenType.PUT, "Expected 'put'");
+
+        Expression expression = parseExpression();
+
+        expect(TokenType.INTO, "Expected 'into' after expression in put statement");
+
+        Token nameToken = expect(TokenType.IDENTIFIER,"Expected a variable name after 'into'");
+        match(TokenType.NEWLINE);
+        return new AssignInstruction(nameToken.getValue(), expression);
+    } 
+
+    // print <expression>
+    // Token sequence
+    // PRINT ecpression... NEWLINE 
+    private Instruction parsePrint() {
+
+        // consume 'print'
+        expect(TokenType.PRINT, "Expected 'print'");
+
+        // parse expression after print
+        Expression expression = parseExpression();
+
+        // consume newline (optional safe)
+        match(TokenType.NEWLINE);
+
+        // return print instruction
+        return new PrintInstruction(expression);
+    } 
 }
