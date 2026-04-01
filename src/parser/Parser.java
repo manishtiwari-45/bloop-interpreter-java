@@ -120,8 +120,8 @@ public class Parser {
             return advance();
         }
         Token bad = peek();
-        throw new RuntimeException(errorMessage + " - got '" + bad.getValue() + "' on line "
-         bad.getLine());
+        throw new RuntimeException(errorMessage + " - got '" + bad.value() +
+                        "' on line " + bad.line());
     }
 
     // skipNewlines() — consume any NEWLINE tokens silently
@@ -136,12 +136,4 @@ public class Parser {
     private List<Instruction> parseBody(){
         return new ArrayList<>();
     }
-
-
-
-
-
-
-
-
 }
