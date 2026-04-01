@@ -23,19 +23,60 @@ public class Parser {
     public List<Instruction> parse(){
         List<Instruction> instructions = new ArrayList<>();
 
-
+        skipNewLines();
+        while(!isAtEnd()){
+            Instruction instruction = parseStatement();
+            if(instruction != null){
+                instructions.add(instruction);
+            }
+            skipNewLines();
+        }
         return instructions;
     }
 
     // Looks at the CURRENT token and decides which instruction to build.
     // Each BLOOP statement starts with a unique keyword. Handled each case.
     private  Instruction parseStatement(){
-        return null;
+        Token current = peek();
+
+        if(current.isType(TokenType.PUT)){
+            return parseAssign();
+        } else if (current.isType(TokenType.PRINT)){
+            return parsePrint();
+        } else if(current.isType(TokenType.IF)){
+            return parseIf();
+        } else if(current.isType(TokenType.REPEAT)){
+            return parseRepeat();
+        } else if (current.isType(TokenType.NEWLINE)) {
+            advance();
+            return null;
+        } else{
+            throw new RuntimeException(
+                    "Unexpected token '" + current.value() +
+                        "' on line " + current.line());
+        }
     }
 
     // Handles the SIMPLEST expressions: a single value with no operator.
     private Expression parsePrimary(){
-        return null;
+        Token token = advance();
+        switch (token.type()){
+            case NUMBER: {
+                double value = Double.parseDouble(token.value());
+                return new NumberNode(value);
+            }
+            case STRING: {
+                return new StringNode(token.value());
+            }
+            case IDENTIFIER: {
+                return new VariableNode(token.value());
+            }
+            default:
+                throw new RuntimeException(
+                        "Expected a value (number, string, or variable) " +
+                                "but got '" + token.value() + "' on line " + token.line()
+                );
+        }
     }
 
     // Handles  *  and  /  (higher priority than + and -)
@@ -47,12 +88,48 @@ public class Parser {
     // Handles  '+'  and  '-'  (lower priority —> outermost level)
     // Calls parseTerm() to get operands, this ensures * runs before +
     private Expression parseExpression() {
-        return null;
+        Expression left = parsePrimary();
+
+        // While the next token is * or /, keep consuming
+        while (check(TokenType.STAR) || check(TokenType.SLASH)){
+            Token opToken = advance();
+
+            // Map token type → Operator enum
+            BinaryOpNode.Operator operator = opToken.isType(TokenType.STAR)
+                    ? BinaryOpNode.Operator.MULTIPLY
+                    : BinaryOpNode.Operator.DIVIDE;
+
+            Expression right = parsePrimary();
+            left = new BinaryOpNode(left, operator, right);
+            // 'left' now holds the result and becomes the new left
+        }
+        return left;
     }
 
     // PARSING
-    private Instruction parseIf(){
-        return null;
+    private Expression parseIf(){
+        Expression left = parseTerm();
+
+        // While next token is + or -, keep consuming
+        while(check(TokenType.PLUS) || check(TokenType.MINUS) ||
+            check(TokenType.GREATER) || check(TokenType.LESS) ||
+            check(TokenType.EQUAL_EQUAL)){
+            
+            Token opToken = advance();
+            
+            BinaryOpNode.Operator operator = 
+                    switch (opToken.type()){
+                        case PLUS -> BinaryOpNode.Operator.ADD;
+                        case MINUS -> BinaryOpNode.Operator.SUBTRACT;
+                        case GREATER -> BinaryOpNode.Operator.GREATER;
+                        case LESS -> BinaryOpNode.Operator.LESS;
+                        case EQUAL_EQUAL -> BinaryOpNode.Operator.EQUAL;
+                        default -> throw new RuntimeException("Unknown operator: " + opToken.value());
+                    };
+            Expression right = parseTerm();
+            left = new BinaryOpNode(left,operator,right);
+        }
+        return left;
     }
 
     private Instruction parseRepeat() {
