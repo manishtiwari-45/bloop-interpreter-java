@@ -255,4 +255,40 @@ public class Parser {
         match(TokenType.NEWLINE);
         return new PrintInstruction(expression);
     } 
+
+    // Method to parse an IF statement
+    private Instruction parseIf() {
+
+        expect(TokenType.IF, "Expected 'if'"); 
+
+        Expression condition = parseExpression(); 
+
+        expect(TokenType.THEN, "Expected 'then' after condition in if statement");
+
+        expect(TokenType.COLON, "Expected ':' after 'then'");
+
+        match(TokenType.NEWLINE); 
+
+        List<Instruction> body = parseBody(); 
+
+        return new IfInstruction(condition, body); 
+    }
+
+    // — parseRepeat —
+    // Parses: repeat <count> times: <body>
+    // Token sequence:
+    //  REPEAT expression... TIMES COLON NEWLINE <body instructions>
+    private Instruction parseRepeat() {
+
+        // Consume REPEAT
+        expect(TokenType.REPEAT, "Expected 'repeat'");
+        Expression count = parseExpression();
+        expect(TokenType.TIMES, "Expected 'times' after count in repeat statement");
+        expect(TokenType.COLON, "Expected ':' after 'times'");
+
+        match(TokenType.NEWLINE);
+        List<Instruction> body = parseBody();
+
+        return new RepeatInstruction(count, body);
+    }
 }
