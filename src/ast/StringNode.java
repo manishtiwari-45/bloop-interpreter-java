@@ -1,6 +1,6 @@
 package ast;
 
-import runtime.Enviroment;
+import runtime.Environment;
 
 // Immutable leaf node - holds a string literal from source code.
 public final class StringNode implements Expression {
