@@ -1,31 +1,49 @@
-import lexer.Token;
-import lexer.Tokenizer;
-import parser.Parser;
-import runtime.Instruction;
+import interpreter.Interpreter;
 
+import java.io.IOException;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
+
 
 public class Main {
-    public static void main(String[] args) throws Exception {
-        String source= new String(
-            Files.readAllBytes(Paths.get("samples/program2_strings.bloop"))
-        );
+    public static void main(String[] args){
 
-        Tokenizer tokenizer = new Tokenizer(source);
-        List<Token> tokens = tokenizer.tokenize();
+        // Validate arguments
+        if(args.length == 0){
+            System.err.println("Usage: java Main <filename.bloop>");
+            System.err.println("       java Main <filename.bloop> --debug");
+            System.exit(1);
+        }
+        String filePath = args[0];
+        boolean debug = args.length > 1 && args[1].equals("--debug");
 
-        System.out.println("===TOKENS===");
-        Tokenizer.printTokens(tokens);
-
-        Parser parser = new Parser(tokens);
-        List<Instruction> instruction = parser.parse();
-        System.out.println("\n===INSTRUCTIONS===");
-        for(Instruction inst: instruction){
-            System.out.println(inst);
+        // Read .bloop file
+        String source;
+        try {
+            source = Files.readString(Paths.get(filePath));
+        } catch (NoSuchFileException e) {
+            System.err.println("Error: file not found - " + filePath);
+            System.exit(1);
+            return;
+        } catch (IOException e){
+            System.err.println("Error reading file: " + e.getMessage());
+            System.exit(1);
+            return;
         }
 
-  
+        // Run the interpreter
+        Interpreter interpreter = new Interpreter();
+        try {
+            if(debug){
+                interpreter.runWithDebug(source);
+            } else {
+                interpreter.run(source);
+            }
+        } catch (RuntimeException e) {
+            // Catch errors from the interpreter (undefined variable, syntax error, etc.)
+            System.err.println("\nBLOOP Error: " + e.getMessage());
+            System.exit(1);
+        }
     }
 }
