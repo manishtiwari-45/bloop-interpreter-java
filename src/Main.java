@@ -1,23 +1,30 @@
 import lexer.Token;
 import lexer.Tokenizer;
-import java.util.List;
+import parser.Parser;
+import runtime.Instruction;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio..file.Path;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-
-        // Read program1 source code into a string
-        String source = new String(
-                Files.readAllBytes(Paths.get("C:\\ACADEMIC\\4th_Semester\\AOOPs\\bloop-interpreter-java\\samples\\program1_arithmetic.bloop"))
+        String source= new String(
+            Files.readAllBytes(Paths.get("sample/program1_arithmetic.bloop"))
         );
 
-        // Run the tokenizer
         Tokenizer tokenizer = new Tokenizer(source);
-        List<Token> tokens = tokenizer.tokenize();
+        List<Token> token = tokenizer.tokenize();
 
-        for (Token token : tokens) {
-            System.out.println(token);
+        System.out.println("===TOKENS===");
+        Tokenizer.printTokens(tokens);
+
+        Parser parser = new Parser(tokens);
+        List<Instruction> instruction = parser.parser();
+        System.out.println("\n===INSTRUCTIONS===");
+        for(Instruction inst: instruction){
+            System.out.println(inst);
         }
+
+  
     }
 }
