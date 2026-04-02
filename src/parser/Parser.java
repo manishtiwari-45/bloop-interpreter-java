@@ -82,12 +82,6 @@ public class Parser {
     // Handles  *  and  /  (higher priority than + and -)
     // Calls parsePrimary() to get operands.
     private Expression parseTerm() {
-        return null;
-    }
-
-    // Handles  '+'  and  '-'  (lower priority —> outermost level)
-    // Calls parseTerm() to get operands, this ensures * runs before +
-    private Expression parseExpression() {
         Expression left = parsePrimary();
 
         // While the next token is * or /, keep consuming
@@ -106,18 +100,19 @@ public class Parser {
         return left;
     }
 
-    // PARSING
-    private Expression parseIf(){
+    // Handles  '+'  and  '-'  (lower priority —> outermost level)
+    // Calls parseTerm() to get operands, this ensures * runs before +
+    private Expression parseExpression() {
         Expression left = parseTerm();
 
         // While next token is + or -, keep consuming
         while(check(TokenType.PLUS) || check(TokenType.MINUS) ||
-            check(TokenType.GREATER) || check(TokenType.LESS) ||
-            check(TokenType.EQUAL_EQUAL)){
-            
+                check(TokenType.GREATER) || check(TokenType.LESS) ||
+                check(TokenType.EQUAL_EQUAL)){
+
             Token opToken = advance();
-            
-            BinaryOpNode.Operator operator = 
+
+            BinaryOpNode.Operator operator =
                     switch (opToken.type()){
                         case PLUS -> BinaryOpNode.Operator.ADD;
                         case MINUS -> BinaryOpNode.Operator.SUBTRACT;
@@ -132,9 +127,9 @@ public class Parser {
         return left;
     }
 
-    private Instruction parseRepeat() {
-        return null;
-    }
+    // PARSING
+
+
 
     // Helper methods
     // peek() —> look at the current token WITHOUT consuming it
@@ -223,7 +218,7 @@ public class Parser {
 
     // Checks if current token is a top-level statement start
     private boolean isTopLevelStart() {
-        TokenType type = peek().getType();
+        TokenType type = peek().type();
 
         // Valid top-level tokens
         return type == TokenType.PUT ||
