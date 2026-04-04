@@ -7,30 +7,31 @@ import java.util.Optional;
 import java.util.Set;
 
 // Stores variables (name → value)
-public class Environment<V> {
+public class Environment implements VariableStore {
 
     // Internal storage
-    private final Map<String, V> store = new HashMap<>();
+    private final Map<String, Object> store = new HashMap<>();
 
     // Add or update variable
-    public void set(String name, V value) {
-        store.put(name, value);
-    }
+    // @Override
+    public void set(String name, Object value) { store.put(name, value); }
+    
 
     // Get variable value (may be empty)
-    public Optional<V> get(String name) {
-        return Optional.ofNullable(store.get(name));
+    // @Override
+    public Optional<Object> get(String name) {
+         return Optional.ofNullable(store.get(name));
     }
 
     // Check if variable exists
-    public boolean has(String name) {
-        return store.containsKey(name);
-    }
+    // @Override
+    public boolean has(String name) { return store.containsKey(name); }
 
     // Get all variables (read-only)
-    public Map<String, V> getAll() {
+    public Map<String, Object> getAll() {
         return Collections.unmodifiableMap(store);
     }
+    
 
     // Get all variable names (read-only)
     public Set<String> variableNames() {
@@ -39,7 +40,5 @@ public class Environment<V> {
 
     // String representation of environment
     @Override
-    public String toString() {
-        return "Environment" + store.toString();
-    }
+    public String toString() { return "Environment" + store; }
 }
