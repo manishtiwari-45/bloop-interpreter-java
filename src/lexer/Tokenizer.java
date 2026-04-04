@@ -132,12 +132,5 @@ public class Tokenizer implements Lexer {
         tokens.forEach(System.out::println);
     }
 
-    //  @Override 
-    public List<Token> tokenize() {
-        while (!isAtEnd()) { scanToken(); }
-        tokens.add(new Token(TokenType.EOF, "", line));
-        return Collections.unmodifiableList(tokens);
-   }
-
 }
 

@@ -22,11 +22,11 @@ public final class IfInstruction implements Instruction {
 
     // Executes body if condition evaluates to true
     @Override
-    public void execute(Environment<Object> env) {
-        Object result = condition.evaluate(env);
+    public void execute(VariableStore store) {
+        Object result = condition.evaluate(store);
 
         if (isTruthy(result)) {
-            body.forEach(instruction -> instruction.execute(env));
+            body.forEach(instruction -> instruction.execute(store));
         }
     }
 

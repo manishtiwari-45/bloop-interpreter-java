@@ -7,16 +7,25 @@ import ast.Expression;
 
 public final class PrintInstruction implements Instruction {
     private final Expression expression;
+    private final OutputFormatter formatter;
 
+    // Default constructor: uses DefaultOutputFormatter 
     public PrintInstruction(Expression expression){
-        this.expression = expression;
+        this(expression, new DefaultOutputFormatter());
     }
+
+    // Full constructor: inject any OutputFormatter (DIP + testability) 
+    public PrintInstruction(Expression expression, OutputFormatter formatter) { 
+        this.expression = expression; 
+        this.formatter  = formatter; 
+    } 
 
     // Evaluate the expression → convert result to string → print.
     @Override
-    public void execute(Environment<Object> env){
-        Object value = expression.evaluate(env);
-        System.out.println(formatOutput(value));
+    public void execute(VariableStore store){
+        Object value = expression.evaluate(store);
+        String output = formatter.format(value);
+        System.out.println(output);
     }
     // Format: if value is a whole number Double, print without decimal.
     private String formatOutput(Object value){

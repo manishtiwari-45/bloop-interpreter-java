@@ -5,5 +5,5 @@ package runtime;
 public interface Instruction {
 
     // Executes instruction using current environment
-    void execute(Environment<Object> env);
+    void execute(VariableStore store);
 }

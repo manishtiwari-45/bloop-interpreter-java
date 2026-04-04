@@ -19,9 +19,9 @@ public final class AssignInstruction implements Instruction {
 
     // Execute: evaluate expression and store result
     @Override
-    public void execute(Environment<Object> env) {
-        Object value = expression.evaluate(env); // evaluate expression
-        env.set(varName, value); // store in environment
+    public void execute(VariableStore store) {
+        Object value = expression.evaluate(store); // evaluate expression
+        store.set(varName, value); // store in environment
     }
     // Get variable name
     public String getVarName() { return varName; }

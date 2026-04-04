@@ -20,12 +20,12 @@ public final class RepeatInstruction implements Instruction {
 
     // Execute: evaluate count → run body that many times.
     @Override
-    public void execute(Environment<Object> env) {
-        int times = toInt(count.evaluate(env));
+    public void execute(VariableStore store) {
+        int times = toInt(count.evaluate(store));
 
         IntStream.range(0, times)
                 .forEach(i ->
-                        body.forEach(instruction -> instruction.execute(env))
+                        body.forEach(instruction -> instruction.execute(store))
                 );
     }
 
