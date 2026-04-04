@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-public class Tokenizer {
+
+public class Tokenizer implements Lexer {
 
     private final String source; // source code — immutable reference
     private int current = 0; // current character position
@@ -130,4 +131,13 @@ public class Tokenizer {
         System.out.println("=== Token List (" + tokens.size() + " tokens) ===");
         tokens.forEach(System.out::println);
     }
+
+    //  @Override 
+    public List<Token> tokenize() {
+        while (!isAtEnd()) { scanToken(); }
+        tokens.add(new Token(TokenType.EOF, "", line));
+        return Collections.unmodifiableList(tokens);
+   }
+
 }
+
