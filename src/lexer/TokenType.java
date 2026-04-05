@@ -67,7 +67,6 @@ public enum TokenType {
     map.put("repeat", REPEAT);
     map.put("times", TIMES);
 
-    // Make the map unmodifiable (read-only)
     // Any attempt to modify it later will throw an exception
     KEYWORD_MAP = Collections.unmodifiableMap(map);
   }
@@ -77,9 +76,8 @@ public enum TokenType {
       // Copy all values from KEYWORD_MAP into an efficient enum set
       EnumSet.copyOf(KEYWORD_MAP.values());
 
-  // Returns TokenType if text is a keyword, else empty Optional
+
   public static Optional<TokenType> fromText(String text) {
-    // Lookup keyword in map (null if not found)
     return Optional.ofNullable(KEYWORD_MAP.get(text));
   }
 
@@ -89,7 +87,6 @@ public enum TokenType {
     return KEYWORD_TYPES.contains(this);
   }
 
-  // Returns read-only keyword map
   public static Map<String, TokenType> getKeywordMap() {
     return KEYWORD_MAP; // cannot be modified
   }
