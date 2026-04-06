@@ -204,12 +204,14 @@ public class Parser {
 
         // Read statements until top-level or EOF
         while (!isAtEnd() && !isTopLevelStart()) {
+            if (check(TokenType.INDENT)) {
+                advance();
+            }
             Instruction instruction = parseStatement();
 
             if (instruction != null) {
                 body.add(instruction);
             }
-
             skipNewLines();
         }
 
@@ -218,6 +220,8 @@ public class Parser {
 
     // Checks if current token is a top-level statement start
     private boolean isTopLevelStart() {
+        if (check(TokenType.INDENT)) return false;
+
         TokenType type = peek().type();
 
         // Valid top-level tokens

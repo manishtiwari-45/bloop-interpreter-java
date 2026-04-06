@@ -47,8 +47,10 @@ public class Tokenizer {
             case '"': scanString(); break;
             case '\n':
                 addToken(TokenType.NEWLINE, "\\n");
+                emitAndIndent();
                 line++;
                 break;
+
             case '\r':
             case ' ':
             case '\t':
@@ -107,6 +109,18 @@ public class Tokenizer {
         Token t = new Token(TokenType.STRING, str.toString(), line);
         tokens.add(t);
         return Optional.of(t);
+    }
+    private void emitAndIndent(){
+        if (!isAtEnd() && (peek() == ' ' || peek() == '\t')) {
+            // Consume all leading whitespace of this new line
+            while (!isAtEnd() && (peek() == ' ' || peek() == '\t')) {
+                advance();
+            }
+            // Only emit INDENT if something real follows (not another newline)
+            if (!isAtEnd() && peek() != '\n' && peek() != '\r') {
+                addToken(TokenType.INDENT, "INDENT");
+            }
+        }
     }
 
     private boolean isAtEnd() { return current >= source.length(); }

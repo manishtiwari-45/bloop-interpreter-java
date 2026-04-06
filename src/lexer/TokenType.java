@@ -43,6 +43,7 @@ public enum TokenType {
   // Special Symbols
   COLON,
   NEWLINE,
+  INDENT,
 
   // End of File
   EOF;
