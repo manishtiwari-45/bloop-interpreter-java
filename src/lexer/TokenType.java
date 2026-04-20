@@ -22,6 +22,8 @@ public enum TokenType {
   REPEAT,
   TIMES,
   ELSE,
+  WHILE,
+  DO,
 
   // Literals (actual values in code)
   NUMBER,
@@ -70,6 +72,8 @@ public enum TokenType {
     map.put("repeat", REPEAT);
     map.put("times", TIMES);
     map.put("else", ELSE);
+    map.put("while",WHILE);
+    map.put("do",DO);
 
     // Any attempt to modify it later will throw an exception
     KEYWORD_MAP = Collections.unmodifiableMap(map);

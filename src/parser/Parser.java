@@ -49,6 +49,8 @@ public class Parser {
         } else if (current.isType(TokenType.NEWLINE)) {
             advance();
             return null;
+        } else if (current.isType(TokenType.WHILE)) {
+            return parseWhile();
         } else{
             throw new RuntimeException(
                     "Unexpected token '" + current.value() +
@@ -232,7 +234,8 @@ public class Parser {
             type == TokenType.IF ||
             type == TokenType.REPEAT ||
             type == TokenType.EOF || 
-            type == TokenType.ELSE;
+            type == TokenType.ELSE ||
+            type == TokenType.WHILE;
     }
 
     // Parses: put<expression> into <variableName>
@@ -297,5 +300,14 @@ public class Parser {
         List<Instruction> body = parseBody();
 
         return new RepeatInstruction(count, body);
+    }
+    private Instruction parseWhile(){
+        expect(TokenType.WHILE, "Expected 'while'");
+        Expression condition = parseExpression();
+        expect(TokenType.DO, "Expected 'do' after condition");
+        expect(TokenType.COLON, "Expected ':' afer 'do'");
+        match(TokenType.NEWLINE);
+        List<Instruction> body = parseBody();
+        return new WhileInstruction(condition, body);
     }
 }
