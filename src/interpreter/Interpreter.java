@@ -1,12 +1,11 @@
 package interpreter;
 
+import java.util.List;
 import lexer.Token;
 import lexer.Tokenizer;
 import parser.Parser;
 import runtime.Environment;
 import runtime.Instruction;
-
-import java.util.List;
 
 // Connects all three pipeline stages and runs a BLOOP program
 public class Interpreter {

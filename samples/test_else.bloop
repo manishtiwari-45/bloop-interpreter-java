@@ -1,0 +1,5 @@
+put 30 into score
+if score > 50 then:
+    print "Pass"
+else:
+    print "Fail"

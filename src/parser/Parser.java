@@ -1,12 +1,11 @@
 package parser;
 
 import ast.*;
+import java.util.ArrayList;
+import java.util.List;
 import lexer.Token;
 import lexer.TokenType;
 import runtime.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Parser {
 
@@ -229,7 +228,8 @@ public class Parser {
             type == TokenType.PRINT ||
             type == TokenType.IF ||
             type == TokenType.REPEAT ||
-            type == TokenType.EOF;
+            type == TokenType.EOF || 
+            type == TokenType.ELSE;
     }
 
     // Parses: put<expression> into <variableName>
@@ -259,18 +259,23 @@ public class Parser {
     private Instruction parseIf() {
 
         expect(TokenType.IF, "Expected 'if'"); 
-
         Expression condition = parseExpression(); 
-
         expect(TokenType.THEN, "Expected 'then' after condition in if statement");
-
         expect(TokenType.COLON, "Expected ':' after 'then'");
-
         match(TokenType.NEWLINE); 
 
         List<Instruction> body = parseBody(); 
 
-        return new IfInstruction(condition, body); 
+        // check for optional else block
+        List<Instruction> elseBody = new ArrayList<>();
+        if(check(TokenType.ELSE)){
+            advance(); // consume else
+            expect(TokenType.COLON, "Expected ':' after 'else'");
+            match(TokenType.NEWLINE);
+            elseBody = parseBody();
+        }
+
+        return new IfInstruction(condition, body, elseBody); 
     }
 
     // — parseRepeat —

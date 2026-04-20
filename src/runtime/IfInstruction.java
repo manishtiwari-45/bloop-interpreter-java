@@ -1,7 +1,6 @@
 package runtime;
 
 import ast.Expression;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -13,12 +12,19 @@ public final class IfInstruction implements Instruction {
 
     // List of instructions to execute if conditiosn is true
     private final List<Instruction> body;
+    private final List<Instruction> elseBody;
 
     // Constructor: initializes condition and makes body unmodifiable
-    public IfInstruction(Expression condition, List<Instruction> body) {
+    public IfInstruction(Expression condition, List<Instruction> body, List<Instruction> elseBody){
         this.condition = condition;
         this.body = Collections.unmodifiableList(new ArrayList<>(body));
+        this.elseBody = Collections.unmodifiableList(new ArrayList<>(elseBody));
     }
+    // backward compatibility constructor(with no-else)
+    public IfInstruction(Expression condition, List<Instruction> body) {
+        this(condition, body, new ArrayList<>());
+    }
+
 
     // Executes body if condition evaluates to true
     @Override
@@ -27,6 +33,9 @@ public final class IfInstruction implements Instruction {
 
         if (isTruthy(result)) {
             body.forEach(instruction -> instruction.execute(env));
+        } else{
+            // run when the condition is false
+            elseBody.forEach(instruction -> instruction.execute(env));
         }
     }
 
