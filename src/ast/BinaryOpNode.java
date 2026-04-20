@@ -82,6 +82,13 @@ public final class BinaryOpNode implements Expression {
         Object leftVal = left.evaluate(env);
         Object rightVal = right.evaluate(env);
 
+        if(operator == Operator.ADD && leftVal instanceof String leftStr && rightVal instanceof String rightStr){
+            return leftStr+rightStr;
+        }
+        if(operator == Operator.ADD && leftVal instanceof String leftStr){
+            return leftStr + formatForConcat(rightVal);
+        }
+
         // Convert to Double
         Double l = toDouble(leftVal);
         Double r = toDouble(rightVal);
@@ -89,6 +96,13 @@ public final class BinaryOpNode implements Expression {
         // Apply operator
         return operator.apply.apply(l, r);
     }
+    private String formatForConcat(Object val) {
+        if (val instanceof Double d) {
+            return (d == Math.floor(d)) ? String.valueOf(d.longValue()) : d.toString();
+        }
+        return String.valueOf(val);
+    }
+
 
     // Convert Object to Double
     private Double toDouble(Object val) {
