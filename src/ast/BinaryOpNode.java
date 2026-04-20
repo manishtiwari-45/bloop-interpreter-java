@@ -1,9 +1,9 @@
 package ast;
 
-import runtime.Environment;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import runtime.Environment;
 
 // Represents a binary operation like a + b or x > y
 public final class BinaryOpNode implements Expression {
@@ -20,6 +20,13 @@ public final class BinaryOpNode implements Expression {
             if (b == 0)
                 throw new RuntimeException("Division by zero");
             return a / b;
+        }),
+
+        MODULO("%",(a,b) -> {
+            if(b == 0){
+                throw new RuntimeException("Modulo by zero");
+            }
+            return a%b;
         }),
 
         GREATER(">", (a, b) -> a > b),

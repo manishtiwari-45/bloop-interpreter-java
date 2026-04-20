@@ -1,0 +1,4 @@
+put 10 into a
+put 3 into b
+put a % b into r
+print r

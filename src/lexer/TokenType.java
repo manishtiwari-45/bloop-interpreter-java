@@ -35,6 +35,7 @@ public enum TokenType {
   MINUS,
   STAR,
   SLASH,
+  PERCENT,
 
   // Comparison Operators
   GREATER,

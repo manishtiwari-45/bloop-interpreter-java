@@ -88,9 +88,12 @@ public class Parser {
             Token opToken = advance();
 
             // Map token type → Operator enum
-            BinaryOpNode.Operator operator = opToken.isType(TokenType.STAR)
-                    ? BinaryOpNode.Operator.MULTIPLY
-                    : BinaryOpNode.Operator.DIVIDE;
+            BinaryOpNode.Operator operator = switch (opToken.type()){
+                case STAR -> BinaryOpNode.Operator.MULTIPLY;
+                case SLASH -> BinaryOpNode.Operator.DIVIDE;
+                case PERCENT -> BinaryOpNode.Operator.MODULO;
+                default -> throw new RuntimeException("Unknown operator: " + opToken.value());
+            };
 
             Expression right = parsePrimary();
             left = new BinaryOpNode(left, operator, right);

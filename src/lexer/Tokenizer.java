@@ -55,6 +55,7 @@ public class Tokenizer {
             case ' ':
             case '\t':
                 break;
+            case '%': addToken(TokenType.PERCENT, "%"); break;
             default:
                 if (Character.isDigit(c)) scanNumber(c);
                 else if (Character.isLetter(c) || c == '_') scanWord(c);
